@@ -1,0 +1,54 @@
+name: CI / Build / Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install backend deps
+        working-directory: ./backend
+        run: npm ci
+      - name: Run backend tests
+        working-directory: ./backend
+        run: npm test --silent
+      - name: Build backend
+        working-directory: ./backend
+        run: npm run build
+      - name: Install frontend deps
+        working-directory: ./frontend-admin
+        run: npm ci
+      - name: Build frontend
+        working-directory: ./frontend-admin
+        run: npm run build
+      - name: Artifacts
+        run: echo "Build finished"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && secrets.RENDER_API_KEY
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trigger Render (if configured)
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+        run: |
+          echo "Triggering deploy on Render..."
+          curl -X POST \
+            -H "Accept: application/json" \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            "https://api.render.com/deploy/srv-$SERVICE_ID"

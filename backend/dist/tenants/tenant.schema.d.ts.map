@@ -1,0 +1,1 @@
+{"version":3,"file":"tenant.schema.d.ts","sourceRoot":"","sources":["../../src/tenants/tenant.schema.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,QAAQ,EAAE,MAAM,UAAU,CAAC;AAEpC,MAAM,MAAM,cAAc,GAAG,MAAM,GAAG,QAAQ,CAAC;AAE/C,qBACa,MAAM;IAEjB,IAAI,EAAG,MAAM,CAAC;IAGd,MAAM,EAAG,MAAM,CAAC;IAGhB,QAAQ,EAAG,OAAO,CAAC;CACpB;AAED,eAAO,MAAM,YAAY;;;;;;;;EAAuC,CAAC"}
