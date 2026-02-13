@@ -1,6 +1,6 @@
 # Logistics ERP — Multi-tenant SaaS (Demo)
 
-[![e2e tests](https://github.com/DelipKumarDev/newrepo/actions/workflows/e2e.yml/badge.svg)](https://github.com/DelipKumarDev/newrepo/actions/workflows/e2e.yml) [![coverage](https://github.com/DelipKumarDev/newrepo/actions/workflows/coverage.yml/badge.svg)](https://github.com/DelipKumarDev/newrepo/actions/workflows/coverage.yml)
+[![e2e tests](https://github.com/DelipKumarDev/newrepo/actions/workflows/e2e.yml/badge.svg)](https://github.com/DelipKumarDev/newrepo/actions/workflows/e2e.yml) [![coverage](https://github.com/DelipKumarDev/newrepo/actions/workflows/coverage.yml/badge.svg)](https://github.com/DelipKumarDev/newrepo/actions/workflows/coverage.yml) [![codecov](https://codecov.io/gh/DelipKumarDev/newrepo/branch/main/graph/badge.svg?token=)](https://codecov.io/gh/DelipKumarDev/newrepo)
 
 Production-ready, multi-tenant Logistics ERP (backend + admin dashboard + mobile app) — starter implementation using free-tier services.
 
