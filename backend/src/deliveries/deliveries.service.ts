@@ -57,6 +57,16 @@ export class DeliveriesService {
     return d;
   }
 
+  // Persist a Proof-Of-Delivery (POD) URL for a delivery
+  async setPodUrl(id: string, podUrl: string) {
+    const d = await this.deliveryModel.findById(id);
+    if (!d) throw new NotFoundException('Delivery not found');
+    d.podUrl = podUrl;
+    d.logs.push({ timestamp: new Date(), message: `POD uploaded: ${podUrl}` });
+    await d.save();
+    return d;
+  }
+
   async findAll(tenantId: string, filter: DeliveryFilter = {}, page = 1, limit = 20) {
     const q: Record<string, unknown> = { tenantId: new Types.ObjectId(tenantId) };
     if (filter.status) (q as any).status = filter.status;

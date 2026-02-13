@@ -2,6 +2,7 @@ import request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 import { TenantsService } from '../src/tenants/tenants.service';
 import { UsersService } from '../src/users/users.service';
+import { RolesService } from '../src/roles/roles.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { User } from '../src/users/schemas/user.schema';
 
@@ -16,8 +17,32 @@ export async function createTenantAndAdmin(moduleRef: any, app: INestApplication
   const tenant = await tenantsService.create({ name: tenantName, domain: uniqueDomain });
   const tenantId = tenant._id.toString();
 
-  const adminEmail = overrides?.adminEmail || 'e2e-admin@example.com';
+  const adminEmail = overrides?.adminEmail || `e2e-admin+${uniqueSuffix}@example.com`;
   const adminPassword = overrides?.adminPassword || 'Admin@1234';
+
+  // ensure an `admin` role exists for tests with permissions typically required in e2e
+  const rolesService = moduleRef.get(RolesService);
+  const needed = [
+    'deliveries.create',
+    'deliveries.read',
+    'deliveries.updateStatus',
+    'deliveries.uploadPod',
+    'deliveries.assign',
+    'deliveries.stats',
+  ];
+  try {
+    const existing = await rolesService.findByNames(['admin']);
+    if (!existing || existing.length === 0) {
+      await rolesService.create({ name: 'admin', permissions: needed });
+    } else {
+      // merge missing permissions if role exists
+      const e = existing[0];
+      const merged = Array.from(new Set([...(e.permissions || []), ...needed]));
+      await rolesService.update(e._id.toString(), { permissions: merged });
+    }
+  } catch (err) {
+    // ignore transient errors in tests
+  }
 
   await usersService.create({
     email: adminEmail,

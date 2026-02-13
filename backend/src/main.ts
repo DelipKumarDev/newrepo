@@ -1,12 +1,26 @@
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { Request, Response, NextFunction } from 'express';
 import { AppModule } from './app.module';
+import { join } from 'path';
+import * as fs from 'fs';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // ensure uploads directory exists for PODs
+  const uploadsRoot = join(process.cwd(), 'uploads');
+  try {
+    fs.mkdirSync(uploadsRoot, { recursive: true });
+  } catch (err) {
+    // ignore
+  }
+
+  // serve uploads statically
+  app.useStaticAssets(uploadsRoot, { prefix: '/uploads' });
 
   // Security
   app.use(helmet());

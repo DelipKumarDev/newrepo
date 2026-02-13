@@ -41,8 +41,20 @@ const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const helmet_1 = __importDefault(require("helmet"));
 const app_module_1 = require("./app.module");
+const path_1 = require("path");
+const fs = __importStar(require("fs"));
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    // ensure uploads directory exists for PODs
+    const uploadsRoot = (0, path_1.join)(process.cwd(), 'uploads');
+    try {
+        fs.mkdirSync(uploadsRoot, { recursive: true });
+    }
+    catch (err) {
+        // ignore
+    }
+    // serve uploads statically
+    app.useStaticAssets(uploadsRoot, { prefix: '/uploads' });
     // Security
     app.use((0, helmet_1.default)());
     // Basic in-memory rate limiter (simple/demo only)

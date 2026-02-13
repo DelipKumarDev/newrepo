@@ -55,6 +55,10 @@ export default function Dashboard() {
           </LineChart>
         </ResponsiveContainer>
       </div>
+
+      <div className="mt-6">
+        <a href="/upload-pod" className="inline-block px-4 py-2 bg-green-600 text-white rounded">Upload POD (test UI)</a>
+      </div>
     </div>
   );
 }

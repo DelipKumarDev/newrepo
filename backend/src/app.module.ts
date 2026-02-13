@@ -1,12 +1,14 @@
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 
 import { envValidation } from './config/env.config';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { ContextService } from './common/context/context.service';
 import { TenantMiddleware } from './common/middleware/tenant.middleware';
+import { PermissionsGuard } from './auth/guards/permissions.guard';
+import { Reflector } from '@nestjs/core';
 
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
@@ -44,6 +46,8 @@ const cfg = envValidation();
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
     },
+    // register Reflector (PermissionsGuard applied via @UseGuards where needed)
+    Reflector,
   ],
 })
 export class AppModule implements NestModule {

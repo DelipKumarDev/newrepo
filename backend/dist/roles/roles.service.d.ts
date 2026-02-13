@@ -13,6 +13,11 @@ export declare class RolesService {
     }> & {
         __v: number;
     })[]>;
+    findByNames(names: string[]): Promise<(import("mongoose").FlattenMaps<RoleDocument> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    })[]>;
     findOne(id: string): Promise<import("mongoose").Document<unknown, {}, RoleDocument, {}, {}> & Role & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
         _id: import("mongoose").Types.ObjectId;
     }> & {

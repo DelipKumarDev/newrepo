@@ -65,6 +65,16 @@ let DeliveriesService = class DeliveriesService {
         await d.save();
         return d;
     }
+    // Persist a Proof-Of-Delivery (POD) URL for a delivery
+    async setPodUrl(id, podUrl) {
+        const d = await this.deliveryModel.findById(id);
+        if (!d)
+            throw new common_1.NotFoundException('Delivery not found');
+        d.podUrl = podUrl;
+        d.logs.push({ timestamp: new Date(), message: `POD uploaded: ${podUrl}` });
+        await d.save();
+        return d;
+    }
     async findAll(tenantId, filter = {}, page = 1, limit = 20) {
         const q = { tenantId: new mongoose_2.Types.ObjectId(tenantId) };
         if (filter.status)

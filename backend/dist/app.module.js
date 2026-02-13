@@ -15,6 +15,7 @@ const env_config_1 = require("./config/env.config");
 const all_exceptions_filter_1 = require("./common/filters/all-exceptions.filter");
 const context_service_1 = require("./common/context/context.service");
 const tenant_middleware_1 = require("./common/middleware/tenant.middleware");
+const core_2 = require("@nestjs/core");
 const auth_module_1 = require("./auth/auth.module");
 const users_module_1 = require("./users/users.module");
 const tenants_module_1 = require("./tenants/tenants.module");
@@ -56,6 +57,8 @@ exports.AppModule = AppModule = __decorate([
                 provide: core_1.APP_FILTER,
                 useClass: all_exceptions_filter_1.AllExceptionsFilter,
             },
+            // register Reflector (PermissionsGuard applied via @UseGuards where needed)
+            core_2.Reflector,
         ],
     })
 ], AppModule);
