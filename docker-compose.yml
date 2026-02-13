@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - '3001:3001'
+    environment:
+      - PORT=3001
+      - NODE_ENV=development
+      - CORS_ORIGIN=http://localhost:5173
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - REFRESH_SECRET=${REFRESH_SECRET}
+    depends_on: []
+
+  frontend:
+    build: ./frontend-admin
+    ports:
+      - '5173:80'
+    environment:
+      - VITE_API_URL=http://localhost:3001/api
+
+  # Optional local Mongo for development (commented out when using Atlas)
+  mongo:
+    image: mongo:6.0
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
