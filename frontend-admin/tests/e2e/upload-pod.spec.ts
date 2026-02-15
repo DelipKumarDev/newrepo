@@ -26,24 +26,26 @@ test.describe('Upload POD (UI)', () => {
     expect([200,201]).toContain(loginResp.status());
     const tokens = await loginResp.json();
 
-    // set token in localStorage then navigate to upload page
+    // set token in localStorage then navigate to dashboard and use the UI demo-creator
     await page.addInitScript(token => {
       localStorage.setItem('accessToken', token);
     }, tokens.accessToken);
 
-    await page.goto('/upload-pod');
-    await expect(page.locator('text=Upload POD (test UI)')).toBeVisible();
+    await page.goto('/');
+    await expect(page.locator('text=Dashboard')).toBeVisible();
 
-    // create a delivery via API to use its id
-    const createDelivery = await request.newContext({ extraHTTPHeaders: { Authorization: `Bearer ${tokens.accessToken}` } })
-      .then(ctx => ctx.post(`${API_BASE}/api/deliveries`, { data: { tenantId: tenantJson._id, reference: `PW-${unique}`, pickupAddress: 'A', dropoffAddress: 'B', distanceKm: 1 } }));
-    expect([200,201]).toContain(createDelivery.status());
-    const delivery = await createDelivery.json();
+    // click the demo button (creates a delivery and should redirect to /upload-pod)
+    await page.click('button:has-text("Create demo delivery")');
+
+    // wait for redirect to upload page and extract deliveryId from URL
+    await page.waitForURL(/\/upload-pod\?deliveryId=.*/);
+    const url = new URL(page.url());
+    const deliveryId = url.searchParams.get('deliveryId');
+    expect(deliveryId).toBeTruthy();
 
     // attach file and submit
-    const filePath = 'tests/fixtures/pod.txt';
     await page.setInputFiles('input[type=file]', [{ name: 'pod.txt', mimeType: 'text/plain', buffer: Buffer.from('playwright-pod') }]);
-    await page.fill('input[placeholder="Delivery ID"]', delivery._id);
+    await page.fill('input[placeholder="Delivery ID"]', deliveryId);
     await page.click('button:has-text("Upload POD")');
 
     // ensure success message appears

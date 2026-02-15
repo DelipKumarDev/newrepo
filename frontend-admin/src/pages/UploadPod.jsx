@@ -5,6 +5,17 @@ export default function UploadPod() {
   const [file, setFile] = useState(null);
   const [msg, setMsg] = useState('');
 
+  // Pre-fill deliveryId from URL query param (so dashboard/demo can redirect here)
+  React.useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('deliveryId');
+      if (id) setDeliveryId(id);
+    } catch (err) {
+      // ignore
+    }
+  }, []);
+
   const upload = async (e) => {
     e.preventDefault();
     if (!deliveryId || !file) return setMsg('provide delivery id + file');

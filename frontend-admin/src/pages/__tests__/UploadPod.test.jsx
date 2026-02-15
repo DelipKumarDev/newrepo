@@ -37,4 +37,15 @@ describe('UploadPod UI', () => {
     await waitFor(() => expect(global.fetch).toHaveBeenCalled());
     expect(await screen.findByText(/uploaded — podUrl:/i)).toBeInTheDocument();
   });
+
+  it('prefills delivery id from URL query param', async () => {
+    // set URL param before rendering
+    const demoId = 'DEMO-URL-1';
+    window.history.pushState({}, 'Test', `/upload-pod?deliveryId=${demoId}`);
+
+    render(<UploadPod />);
+
+    const deliveryInput = await screen.findByLabelText(/delivery id/i);
+    expect(deliveryInput.value).toBe(demoId);
+  });
 });
