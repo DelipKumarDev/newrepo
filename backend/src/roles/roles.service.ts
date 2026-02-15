@@ -15,6 +15,10 @@ export class RolesService {
     return this.roleModel.find().lean();
   }
 
+  async findByNames(names: string[]) {
+    return this.roleModel.find({ name: { $in: names } }).lean();
+  }
+
   async findOne(id: string) {
     const r = await this.roleModel.findById(id);
     if (!r) throw new NotFoundException('Role not found');

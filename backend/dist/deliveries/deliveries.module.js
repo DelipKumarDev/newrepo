@@ -13,12 +13,13 @@ const deliveries_service_1 = require("./deliveries.service");
 const deliveries_controller_1 = require("./deliveries.controller");
 const delivery_schema_1 = require("./schemas/delivery.schema");
 const ai_module_1 = require("../ai/ai.module");
+const roles_module_1 = require("../roles/roles.module");
 let DeliveriesModule = class DeliveriesModule {
 };
 exports.DeliveriesModule = DeliveriesModule;
 exports.DeliveriesModule = DeliveriesModule = __decorate([
     (0, common_1.Module)({
-        imports: [mongoose_1.MongooseModule.forFeature([{ name: delivery_schema_1.Delivery.name, schema: delivery_schema_1.DeliverySchema }]), ai_module_1.AiModule],
+        imports: [mongoose_1.MongooseModule.forFeature([{ name: delivery_schema_1.Delivery.name, schema: delivery_schema_1.DeliverySchema }]), ai_module_1.AiModule, roles_module_1.RolesModule],
         providers: [deliveries_service_1.DeliveriesService],
         controllers: [deliveries_controller_1.DeliveriesController],
         exports: [deliveries_service_1.DeliveriesService],

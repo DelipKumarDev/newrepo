@@ -55,6 +55,35 @@ export default function Dashboard() {
           </LineChart>
         </ResponsiveContainer>
       </div>
+
+      <div className="mt-6 space-x-2">
+        <button
+          className="inline-block px-4 py-2 bg-blue-600 text-white rounded"
+          onClick={async () => {
+            try {
+              // decode tenantId from JWT so frontend can POST tenantId (server-side validates it)
+              const token = localStorage.getItem('accessToken');
+              if (!token) return (window.location.href = '/login');
+              const payload = JSON.parse(atob(token.split('.')[1]));
+              const tenantId = payload?.tenantId;
+              const res = await api.post((import.meta.env.VITE_API_URL || 'http://localhost:3001') + '/deliveries', {
+                tenantId,
+                reference: `demo-ui-${Date.now()}`,
+                pickupAddress: 'Demo Pickup',
+                dropoffAddress: 'Demo Dropoff',
+              });
+              const id = res?.data?._id;
+              if (id) window.location.href = `/upload-pod?deliveryId=${id}`;
+            } catch (err) {
+              // simple fallback
+              alert('Failed to create demo delivery');
+            }
+          }}
+        >
+          Create demo delivery
+        </button>
+        <a href="/upload-pod" className="inline-block px-4 py-2 bg-green-600 text-white rounded">Upload POD (test UI)</a>
+      </div>
     </div>
   );
 }

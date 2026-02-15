@@ -27,6 +27,9 @@ let RolesService = class RolesService {
     async findAll() {
         return this.roleModel.find().lean();
     }
+    async findByNames(names) {
+        return this.roleModel.find({ name: { $in: names } }).lean();
+    }
     async findOne(id) {
         const r = await this.roleModel.findById(id);
         if (!r)

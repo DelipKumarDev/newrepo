@@ -26,6 +26,11 @@ export declare class DeliveriesService {
     }> & {
         __v: number;
     }>;
+    setPodUrl(id: string, podUrl: string): Promise<import("mongoose").Document<unknown, {}, DeliveryDocument, {}, {}> & Delivery & import("mongoose").Document<Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: Types.ObjectId;
+    }> & {
+        __v: number;
+    }>;
     findAll(tenantId: string, filter?: DeliveryFilter, page?: number, limit?: number): Promise<{
         data: (import("mongoose").FlattenMaps<DeliveryDocument> & Required<{
             _id: Types.ObjectId;

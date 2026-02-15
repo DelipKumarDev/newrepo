@@ -15,6 +15,17 @@ export declare class DeliveriesController {
     }> & {
         __v: number;
     }>;
+    uploadPod(id: string, file: any, req: Request & {
+        user: {
+            tenantId: string;
+        };
+    }): Promise<(import("mongoose").Document<unknown, {}, import("./schemas/delivery.schema").DeliveryDocument, {}, {}> & import("./schemas/delivery.schema").Delivery & import("mongoose").Document<import("mongoose").Types.ObjectId, any, any, Record<string, any>, {}> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }> & {
+        __v: number;
+    }) | {
+        success: boolean;
+    }>;
     updateStatus(id: string, body: {
         status: DeliveryStatus;
         podUrl?: string;
